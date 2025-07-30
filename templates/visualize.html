@@ -1,0 +1,23 @@
+<!-- templates/visualize.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>اختيار العمود للرسم</title>
+</head>
+<body>
+    <h1>عرض البيانات</h1>
+
+    <h3>معاينة من الملف:</h3>
+    {{ preview | safe }}
+
+    <form action="/visualize" method="post">
+        <label for="column_name">اختر عمود للرسم البياني:</label>
+        <select name="column_name" id="column_name" required>
+            {% for col in columns %}
+                <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">رسم</button>
+    </form>
+</body>
+</html>

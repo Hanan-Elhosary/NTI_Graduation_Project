@@ -1,0 +1,17 @@
+# Python virtual environment
+venv/
+.venv/
+
+# VSCode config (لو بتستخدميه)
+.vscode/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Uploaded data
+uploads/
+data.csv
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
