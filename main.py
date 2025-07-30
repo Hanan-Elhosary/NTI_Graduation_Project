@@ -1,10 +1,11 @@
-# main.py
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
+from run_crew import crew
 
 app = FastAPI()
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,3 +22,12 @@ def read_root():
 async def upload_csv(file: UploadFile = File(...)):
     contents = await file.read()
     return {"filename": file.filename, "size": len(contents)}
+
+class CrewInput(BaseModel):
+    argument: str
+    csv_path: Optional[str] = None
+
+@app.post("/run-crew")
+async def run_crew_endpoint(data: CrewInput):
+    result = crew.run(data.dict())
+    return {"result": result}

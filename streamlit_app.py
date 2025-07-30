@@ -1,4 +1,3 @@
-# streamlit_app.py
 import streamlit as st
 import pandas as pd
 import os
@@ -9,21 +8,25 @@ st.set_page_config(page_title="LLM Dashboard", layout="wide")
 st.sidebar.title("📂 Upload Data")
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type=["csv"])
 
-# Initialize session state
 if 'df' not in st.session_state:
     st.session_state.df = None
+if 'csv_path' not in st.session_state:
+    st.session_state.csv_path = None
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
     st.session_state.df = df
-    # Save file locally
-    with open(os.path.join("data", uploaded_file.name), "wb") as f:
+
+    os.makedirs("data", exist_ok=True)
+    csv_path = os.path.join("data", uploaded_file.name)
+    with open(csv_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
+
+    st.session_state.csv_path = csv_path
     st.sidebar.success("✅ File uploaded and saved!")
 
 st.title("📊 AI-Powered Data Analysis Platform")
 
-# Tabs
 tab1, tab2, tab3 = st.tabs(["📈 Dashboard", "🧾 Data", "🤖 Chatbot"])
 
 with tab1:
@@ -47,8 +50,18 @@ with tab3:
     if st.session_state.df is not None:
         user_input = st.text_input("Ask something about the data:")
         if user_input:
-            # You could use requests.post to send to FastAPI or run local Crew
-            st.write(f"🧠 Chatbot is thinking about: `{user_input}`")
-
+            with st.spinner("Thinking..."):
+                response = requests.post(
+                    "http://127.0.0.1:8000/run-crew",
+                    json={
+                        "argument": user_input,
+                        "csv_path": st.session_state.csv_path
+                    }
+                )
+                if response.status_code == 200:
+                    st.success("✅ Chatbot response received!")
+                    st.write(response.json()["result"])
+                else:
+                    st.error("❌ Failed to get a response.")
     else:
         st.warning("Please upload data first to enable chatbot.")

@@ -1,8 +1,11 @@
-fastapi
 uvicorn
 pandas
 streamlit
 requests
 crewai
-openai  # لو بتستخدم LLM من OpenAI
-python-dotenv  # لإدارة المفاتيح السرية من ملف .env
+openai
+python-dotenv
+matplotlib
+wordcloud
+langchain
+langchain-community
