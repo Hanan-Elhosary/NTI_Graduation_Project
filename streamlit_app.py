@@ -34,7 +34,18 @@ with tab1:
     if st.session_state.df is not None:
         st.metric("Rows", st.session_state.df.shape[0])
         st.metric("Columns", st.session_state.df.shape[1])
-        st.write("📊 Charts will appear here soon.")
+        with st.spinner("Generating Dashboard..."):
+            response = requests.post(
+                "http://127.0.0.1:8000/run-crew",
+                json={
+                    "argument": "Generate dashboard",
+                    "csv_path": st.session_state.csv_path
+                }
+            )
+            if response.status_code == 200:
+                st.markdown(response.json()["result"], unsafe_allow_html=True)
+            else:
+                st.error("❌ Failed to generate dashboard.")
     else:
         st.info("Upload a file to see dashboard insights.")
 
@@ -65,3 +76,4 @@ with tab3:
                     st.error("❌ Failed to get a response.")
     else:
         st.warning("Please upload data first to enable chatbot.")
+

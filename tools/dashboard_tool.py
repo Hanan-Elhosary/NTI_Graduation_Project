@@ -29,21 +29,11 @@ class DashboardTool(BaseTool):
             wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text_data)
             images_html.append(self._save_plot_image(wordcloud.to_image(), "Word Frequency Cloud"))
 
-            if 'Product' in df.columns:
-                images_html.append(self._plot_bar(df['Product'], "Complaints by Product"))
-            if 'Company' in df.columns:
-                images_html.append(self._plot_bar(df['Company'], "Complaints by Company"))
-            if 'State' in df.columns:
-                images_html.append(self._plot_bar(df['State'], "Complaints by State"))
-            if 'Date received' in df.columns:
-                df['Date received'] = pd.to_datetime(df['Date received'], errors='coerce')
-                time_series = df['Date received'].dt.to_period('M').value_counts().sort_index()
-                fig, ax = plt.subplots(figsize=(10, 4))
-                time_series.plot(ax=ax)
-                ax.set_title("Complaints Over Time")
-                ax.set_xlabel("Month")
-                ax.set_ylabel("Number of Complaints")
-                images_html.append(self._save_plot_image(fig))
+            for col, title in [("Category", "Complaints by Category"),
+                               ("Subcategory", "Complaints by Subcategory"),
+                               ("Priority", "Complaints by Priority")]:
+                if col in df.columns:
+                    images_html.append(self._plot_bar(df[col], title))
 
             return "<br><br>".join(images_html)
 

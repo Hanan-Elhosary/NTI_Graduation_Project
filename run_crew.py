@@ -3,9 +3,8 @@ from tasks import conversational_data_analysis, dashboard_visualization_task
 import os
 from utils import get_openai_api_key
 
-# Ensure API key is loaded
 os.environ["OPENAI_API_KEY"] = get_openai_api_key()
-os.environ["OPENAI_MODEL_NAME"] = "HuggingFaceH4/zephyr-7b-beta"
+os.environ["OPENAI_MODEL_NAME"] = "gpt-3.5-turbo"
 
 crew = Crew(
     tasks=[

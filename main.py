@@ -16,7 +16,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "🚀 FastAPI Backend Ready"}
+    return {"message": "\ud83d\ude80 FastAPI Backend Ready"}
 
 @app.post("/upload-csv/")
 async def upload_csv(file: UploadFile = File(...)):

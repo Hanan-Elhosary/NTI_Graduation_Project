@@ -13,7 +13,7 @@ dashboard_agent = Agent(
     goal="Generate dashboards from complaint datasets",
     backstory="You are a Data Analytics Agent skilled in generating insights from complaint data.",
     tools=[DashboardTool()],
-    llm=llm,  # تمرير الموديل هنا
+    llm=llm,
     allow_delegation=False,
     verbose=True
 )
